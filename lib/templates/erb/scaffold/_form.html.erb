@@ -1,0 +1,56 @@
+<%% remote = false if remote == nil %>
+<%% id ||= Time.now.to_i %>
+
+<%%= form_for([:admin, @<%= model_resource_name %>], remote: remote, class: "form fv-plugins-bootstrap5 fv-plugins-framework" ) do |form| %>
+    <div class="card-body p-9">
+        <%%= error_messages(@<%= model_resource_name %>) %>
+        <div class="row">
+            <% attributes.each do |attribute| -%>
+                <% if attribute.password_digest? -%>
+                    <div class="col-lg-6 col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <%%= form.label :password, class: "d-flex align-items-center fs-5 fw-semibold mb-2" %>
+                            <%%= form.password_field :password, class: 'form-control form-control-lg form-control-solid' %>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12 col-md-12">
+                        <div class="form-group">
+                            <%%= form.label :password_confirmation, class: "d-flex align-items-center fs-5 fw-semibold mb-2"  %>
+                            <%%= form.password_field :password_confirmation, class: 'form-control form-control-lg form-control-solid' %>
+                        </div>
+                    </div>
+                <% else %>
+                    <% unless attribute.column_name == 'deleted_at' %>
+                        <div class="col-lg-6 col-sm-12 col-md-12">
+                            <div class="form-group">
+                                <% if attribute.field_type == :check_box %>
+                                    <div class="form-check form-check-custom form-check-solid mb-5">
+                                        <%%= form.<%= attribute.field_type %> :<%= attribute.column_name %>, class: "form-check-input me-3" %>
+                                        <%%= form.label :<%= attribute.column_name %>, class: "form-check-label"   %>
+                                    </div>
+                                <% else %>
+                                    <%%= form.label :<%= attribute.column_name %>, class: "d-flex align-items-center fs-5 fw-semibold mb-2"  %>
+                                    <% if attribute.reference? %>
+                                        <%%= form.collection_select :<%= attribute.column_name %>, <%= attribute.name.camelize %>.all, :id, :descricao, {prompt: true}, class: "select2_basico form-control form-control-lg form-control-solid" , style: "width: 100%" %>
+                                    <% else %>
+                                        <%%= form.<%= attribute.field_type %> :<%= attribute.column_name %>, class: "form-control form-control-lg form-control-solid" %>
+                                    <% end %>
+                                <% end %>
+                            </div>
+                        </div>
+                    <% end %>
+                <% end %>
+            <% end %>
+        </div>
+    </div>
+    <%% unless remote %>
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-lg-6 col-sm-12 col-md-12">
+                    <%%= render "admin/<%= plural_table_name %>/form_actions" %>
+                    <%%= link_to t("helpers.links.cancel"), admin_<%= "#{plural_table_name}" %>_path, :class=> "btn btn-secondary" %>
+                </div>
+            </div>
+        </div>
+    <%% end %>
+<%% end %>

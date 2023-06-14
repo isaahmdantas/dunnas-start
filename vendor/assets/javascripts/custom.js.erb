@@ -1,0 +1,317 @@
+function initDatatable(){
+    $.extend($.fn.dataTable.defaults, {
+        processing: false,
+        paginationType: "full_numbers",
+        language: {
+            "sEmptyTable": "Nenhum registro encontrado",
+            "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+            "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sInfoThousands": ".",
+            "sLengthMenu": "_MENU_ resultados por página",
+            "sLoadingRecords": "Carregando...",
+            "sProcessing": "<img src='<%= asset_path('highcharts/spinner.gif') %>' />",
+            "sZeroRecords": "Nenhum registro encontrado",
+            "sSearch": "Pesquisar",
+            "oPaginate": {
+                "sNext": "<i class='next'></i>",
+                "sPrevious": "<i class='previous'></i>",
+                "sFirst": "Primeiro",
+                "sLast": "Último"
+            },
+            "oAria": {
+                "sSortAscending": ": Ordenar colunas de forma ascendente",
+                "sSortDescending": ": Ordenar colunas de forma descendente"
+            }
+        }
+    });
+}
+
+
+// init select2
+function templateSelect2(controller, placeholder, ajax, allowClear){
+    if (ajax == false) {
+        return {
+            allowClear: allowClear,
+            placeholder: placeholder,
+            language: {
+                errorLoading: function() {
+                    return "Os resultados não puderam ser carregados."
+                },
+                inputTooLong: function(e) {
+                    var n = e.input.length - e.maximum,
+                        r = "Apague " + n + " caracter";
+                    return 1 != n && (r += "es"), r
+                },
+                inputTooShort: function(e) {
+                    return "Digite " + (e.minimum - e.input.length) + " ou mais caracteres"
+                },
+                loadingMore: function() {
+                    return "Carregando mais resultados…"
+                },
+                maximumSelected: function(e) {
+                    var n = "Você só pode selecionar " + e.maximum + " ite";
+                    return 1 == e.maximum ? n += "m" : n += "ns", n
+                },
+                noResults: function() {
+                    return "Nenhum resultado encontrado"
+                },
+                searching: function() {
+                    return "Buscando…"
+                },
+                removeAllItems: function() {
+                    return "Remover todos os itens"
+                }
+            }
+        }
+    }
+    else {
+        return {
+            allowClear:  allowClear,
+            placeholder: placeholder,
+            ajax: {
+                url: '/' + controller +'/search/',
+                delay: 1000,
+                data: function (params) {
+                    return { search: params.term };
+                },
+                dataType: 'json',
+                processResults: function (data, page) {
+                    var select2data = $.map(data, function (obj) {
+                        obj.id = obj.id;
+                        obj.text =  obj.nome || obj.text || obj.descricao || obj.titulo;
+                        return obj;
+                    });
+                    return {
+                        results: select2data
+                    };
+                },
+            },
+            language: {
+                errorLoading: function() {
+                    return "Os resultados não puderam ser carregados."
+                },
+                inputTooLong: function(e) {
+                    var n = e.input.length - e.maximum,
+                        r = "Apague " + n + " caracter";
+                    return 1 != n && (r += "es"), r
+                },
+                inputTooShort: function(e) {
+                    return "Digite " + (e.minimum - e.input.length) + " ou mais caracteres"
+                },
+                loadingMore: function() {
+                    return "Carregando mais resultados…"
+                },
+                maximumSelected: function(e) {
+                    var n = "Você só pode selecionar " + e.maximum + " ite";
+                    return 1 == e.maximum ? n += "m" : n += "ns", n
+                },
+                noResults: function() {
+                    return "<a class='btn btn-success btn-sm' id='value' data-remote='true' href='/"+controller+"/new'><i class='la la-plus'></i> Add </a>";
+                },
+                searching: function() {
+                    return "Buscando…"
+                },
+                removeAllItems: function() {
+                    return "Remover todos os itens"
+                }
+            },
+            escapeMarkup: function (markup) { return markup; },
+            minimumInputLength: 2,
+            templateSelection: function (item) {
+                return item.nome || item.text || obj.descricao || obj.titulo;
+            }
+        }
+    }
+
+}
+
+function initSelect2(){
+    $(".select2_basico").select2(templateSelect2(null, "Selecione", false, true));
+<<<<<<< HEAD
+    $(".select2_estado").select2(templateSelect2(null, "Selecione o Estado", false, true));
+    $(".select2_cidade").select2(templateSelect2(null, "Selecione primeiro o Estado", false, true));
+=======
+    $(".select2_estado").select2(templateSelect2(null, "Selecione Estado", false, true));
+    $(".select2_cidade").select2(templateSelect2(null, "Selecione Cidade", false, true));
+>>>>>>> 582b5f561936ba12678d5559dd7680f21c12ec42
+}
+
+// init campo obrigatorio
+function initCampoObrigatorio(){
+    var originalAddClassMethod = jQuery.fn.addClass;
+    jQuery.fn.addClass = function () {
+        var result = originalAddClassMethod.apply(this, arguments);
+        if (arguments[0] === 'label-required') {
+            if ($(this).find('span.required').length === 0) {
+                $(this).append("<span aria-required='true' class='required'>&nbsp*</span>");
+            }
+        }
+        return result;
+    }
+    var originalRemoveClassMethod = jQuery.fn.removeClass;
+    jQuery.fn.removeClass = function () {
+        var result = originalRemoveClassMethod.apply(this, arguments);
+        if (arguments[0] === 'label-required') {
+            $(this).find('span.required').remove();
+        }
+        return result;
+    }
+    $('label:not(.label-required)').find('span.required').remove();
+    $('.label-required:not(:has(span.required))').append("<span aria-required='true' class='required'>&nbsp*</span>");
+
+    //$('div.collapse:has(.has-error)').collapse('show');
+}
+
+// init mascaras
+function initMascaras(){
+<<<<<<< HEAD
+    // CPF/CNPJ 
+    Inputmask({
+        mask: ["999.999.999-99", "99.999.999/9999-99"], 
+        removeMaskOnSubmit: true 
+    }).mask(".mascara-cpf-cnpj");
+
+    // CPF
+    Inputmask({
+        mask: "999.999.999-99", 
+        removeMaskOnSubmit: true 
+    }).mask(".mascara-cpf");
+
+    // CNPJ
+    Inputmask({
+        mask: "99.999.999/9999-99", 
+        removeMaskOnSubmit: true 
+    }).mask(".mascara-cnpj");
+
+    // Telefone
+    Inputmask({
+        mask: "(99) 9999-9999", 
+        removeMaskOnSubmit: true 
+    }).mask(".mascara-telefone");
+
+    // Celular
+    Inputmask({
+        mask: ["(99) 9999-9999", "(99) 99999-9999"], 
+        removeMaskOnSubmit: true 
+    }).mask(".mascara-celular");
+
+    // RG
+    Inputmask({
+        mask: "999.999.999", 
+        removeMaskOnSubmit: true,
+        numericInput: true, 
+        placeholder: " " 
+    }).mask(".mascara-rg");
+
+    // CEP 
+     Inputmask({
+        mask: "99999-999", 
+        removeMaskOnSubmit: true 
+    }).mask(".mascara-cep");
+
+    // CRO 
+    Inputmask({
+        mask: "9999", 
+        removeMaskOnSubmit: true 
+    }).mask(".mascara-cro");
+
+    // CRO/UF 
+    Inputmask({
+        mask: "aa", 
+        removeMaskOnSubmit: true 
+    }).mask(".mascara-cro_uf");
+
+    // Dinheiro
+    Inputmask("currency", {
+        "autoUnmask": true,
+=======
+    $(".mascara-cpf-cnpj").inputmask({ mask: ["999.999.999-99", "99.999.999/9999-99"], removeMaskOnSubmit: true });
+    $(".mascara-cpf").inputmask({ mask: "999.999.999-99", removeMaskOnSubmit: true });
+    $(".mascara-cnpj").inputmask({ mask: "99.999.999/9999-99", removeMaskOnSubmit: true });
+    $(".mascara-telefone").inputmask({ mask: "(99) 9999-9999", removeMaskOnSubmit: true });
+    $(".mascara-celular").inputmask({ mask: ["(99) 9999-9999", "(99) 99999-9999"], removeMaskOnSubmit: true });
+    $(".mascara-rg").inputmask({ mask: "999.999.999", removeMaskOnSubmit: true, numericInput: true, placeholder: " " });
+    $(".mascara-cep").inputmask({ mask: "99999-999", removeMaskOnSubmit: true });
+    $(".mascara-cro").inputmask({ mask: "9999", removeMaskOnSubmit: true });
+    $(".mascara-cro_uf").inputmask({ mask: "aa", removeMaskOnSubmit: true });
+    $('.mascara-dinheiro').inputmask("currency", {"autoUnmask": true,
+>>>>>>> 582b5f561936ba12678d5559dd7680f21c12ec42
+        radixPoint:",",
+        groupSeparator: ".",
+        allowMinus: false,
+        prefix: 'R$ ',            
+        digits: 2,
+        digitsOptional: false,
+        rightAlign: true,
+        unmaskAsNumber: true
+    }).mask(".mascara-dinheiro");
+
+    // DATABR 
+    Inputmask({
+        mask: "99/99/9999", 
+        removeMaskOnSubmit: false 
+    }).mask(".mascara-dataBR");
+
+    // Cartão Número
+    Inputmask({
+        mask: ["9999 9999 9999 999", "9999 9999 9999 9999", "9999 9999 9999 9999 999"], 
+        removeMaskOnSubmit: true 
+    }).mask(".mascara-cartao-numero");
+
+    // Cartão CVV
+    Inputmask({
+        mask: ["999", "9999"], 
+        removeMaskOnSubmit: true 
+    }).mask(".mascara-cartao-cvv");
+
+    // Cartão CVV
+    Inputmask({
+        mask: ["99"], 
+        removeMaskOnSubmit: true 
+    }).mask(".mascara-cartao-ano-mes");
+
+    // Cartão Documento
+    Inputmask({
+        mask: ["999.999.999-99", "99.999.999/9999-99", "999.999.999"], 
+        removeMaskOnSubmit: true 
+    }).mask(".mascara-documento");
+
+    // Decimal 
+    Inputmask({
+        alias: 'decimal',
+        groupSeparator: '',
+        autoGroup: true,
+        digits: 2,
+        digitsOptional: false,
+        placeholder: '0.00',
+    }).mask(".mascara-dinheiro-decimal");
+}
+
+function initColorpicker(){
+    $('.colorpicker-default').colorpicker();
+}
+
+function initImagePopup() {
+    $('.image-popup').magnificPopup({
+        type: 'image',
+        closeOnContentClick: true,
+        mainClass: 'mfp-img-mobile',
+        image: {
+            verticalFit: true
+        }
+    });
+    $('.iframe-popup').magnificPopup({
+        type: 'iframe',
+        closeOnContentClick: true
+    });
+}
+
+function initDatepicker(){
+    $(".kt_datepicker").flatpickr({
+        weekNumbers: true,
+        locale: "pt",
+        dateFormat: "d/m/Y"
+    });
+}

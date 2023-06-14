@@ -1,0 +1,25 @@
+<%%- model_class=<%= singular_table_name.titleize %> -%>
+
+<%% content_for :page_heading, t('helpers.titles.new', :model=> model_class.model_name.human.titleize )%>
+
+<%% content_for :breadcrumb do %>
+  <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+    <li class="breadcrumb-item text-muted">
+      <%%= link_to'Home', root_path, class: "text-muted text-hover-primary" %>
+    </li>
+    <li class="breadcrumb-item">
+      <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted"><%%= link_to model_class.model_name.human(count: 2).titleize, admin_<%= plural_table_name %>_path, class: "text-muted" %></li>
+    <li class="breadcrumb-item">
+      <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted"><%%= t('helpers.links.new') %></li>
+  </ul>
+<%% end %>
+
+<%% content_for :card_title do %>
+  <%%= t('helpers.titles.new', :model=> model_class.model_name.human.titleize) %>
+<%% end %>
+
+<%%= render 'form' %>

@@ -1,0 +1,29 @@
+
+<div class="d-flex flex-column flex-column-fluid">
+    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0"><%= yield(:page_heading) %></h1>
+                <%= yield(:breadcrumb) %>
+            </div>
+        </div>
+    </div>
+    <div id="kt_app_content" class="app-content flex-column-fluid">
+        <div id="kt_app_content_container" class="app-container container-fluid">
+            <% if content_for?(:card_title) %>
+                <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
+                    <div class="card-header cursor-pointer">
+                        <div class="card-title m-0">
+                            <h3 class="fw-bold m-0"><%= yield(:card_title) %></h3>
+                        </div>
+                    </div>
+                    <%= yield %>
+                </div>
+            <% else %>
+                <%= yield %>
+            <% end %>
+        </div>
+    </div>
+</div>
+
+<%= parent_layout "admin" %>

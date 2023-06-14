@@ -1,0 +1,39 @@
+<% if errors.kind_of?(Array) %>
+    <% errors.try(:each) do |error| %>
+        <% if error.try(:full_messages) %>
+            <% error.try(:full_messages).try(:each) do |msg| %>
+                toastr["error"]("<%= msg %>");
+                $('#loader-wrapper').hide();
+            <% end %>
+        <% else %>
+            toastr["error"]("<%= error %>");
+            $('#loader-wrapper').hide();
+        <% end %>
+    <% end %>
+<% else %>
+    <% if errors.try(:full_messages) %>
+        <% errors.try(:full_messages).try(:each) do |msg| %>
+            toastr["error"]("<%= msg %>");
+            $('#loader-wrapper').hide();
+        <% end %>
+    <% end %>
+<% end %>
+
+toastr.options = {
+  "closeButton": true,
+  "debug": false,
+  "newestOnTop": false,
+  "progressBar": false,
+  "positionClass": "toast-top-right",
+  "preventDuplicates": false,
+  "onclick": null,
+  "showDuration": "300",
+  "hideDuration": "1000",
+  "timeOut": "5000",
+  "extendedTimeOut": "1000",
+  "showEasing": "swing",
+  "hideEasing": "linear",
+  "showMethod": "fadeIn",
+  "hideMethod": "fadeOut",
+  "escapeHtml": true
+}

@@ -1,0 +1,36 @@
+<%%- model_class=<%= singular_table_name.titleize %> -%>
+
+<%% content_for :page_heading, t('helpers.titles.show', :model=> model_class.model_name.human.titleize )%>
+
+<%% content_for :breadcrumb do %>
+  <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+    <li class="breadcrumb-item text-muted">
+      <%%= link_to'Home', root_path, class: "text-muted text-hover-primary" %>
+    </li>
+    <li class="breadcrumb-item">
+      <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted"><%%= link_to model_class.model_name.human(count: 2).titleize, admin_<%= plural_table_name %>_path, class: "text-muted" %></li>
+    <li class="breadcrumb-item">
+      <span class="bullet bg-gray-400 w-5px h-2px"></span>
+    </li>
+    <li class="breadcrumb-item text-muted"><%%= t('helpers.links.show') %></li>
+  </ul>
+<%% end %>
+
+<%% content_for :card_title do %>
+  <%%= t('helpers.titles.show', :model=> model_class.model_name.human.titleize) %>
+<%% end %>
+
+<div class="card-body p-9">
+  <%%= render "show" , resource: @<%= singular_table_name %> %>
+</div>
+
+<div class="card-footer">
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <%%= link_to t("helpers.links.back"), admin_<%= plural_table_name %>_path, class: "btn btn-secondary" %>
+      <%%= render 'show_actions', <%= singular_table_name %>: @<%= singular_table_name %> %>
+    </div>
+  </div>
+</div>
