@@ -51,7 +51,7 @@ $ rails new blog --database=postgresql -m ~/projects/dunnas-start/template.rb
 
 Para configurar a cor primaria do projeto é só alterar no arquivo 'app/assets/stylesheets/colors.css'
 
-![colors.css](https://i.ibb.co/fk8Vh9v/Captura-de-Tela-2022-08-04-a-s-16-01-04.png)
+![colors.css](https://dunnas-cdn.s3.us-east-1.amazonaws.com/Captura-de-Tela-2022-08-04-a-s-16-01-04.png)
 
 *--bs-x-x: #xxxxxx      (Configuração de cores do bootstrap)*
 
@@ -68,7 +68,7 @@ Para configurar a cor primaria do projeto é só alterar no arquivo 'app/assets/
 Para configurar as logos é só alterar no arquivo de 'initializeres' (config/initializers/style.rb)
 
 
-![style.rb](https://i.ibb.co/dmSYxCF/Captura-de-Tela-2022-08-05-a-s-15-58-27.png)
+![style.rb](https://dunnas-cdn.s3.us-east-1.amazonaws.com/Captura-de-Tela-2022-08-05-a-s-15-58-27.png)
 
 
 *Site para hospedar as imagens: https://imgbb.com/*
